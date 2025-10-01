@@ -27,8 +27,10 @@ Feature: ShoppingCart management
     And Click on id product "K9-BD-01"
     And Save price on Item Id Page
     And Click on Add to Cart Button
-    Then Validar que se muestran los productos "FI-SW-01" y "K9-BD-01" en el carrito
-
+    Then Validar que se muestren los siguientes productos
+      | Producto   |
+      | "FI-SW-01" |
+      | "K9-BD-01" |
 
   Scenario: validar que si no hay items en el carrito, no se pueda comprar
 
@@ -50,4 +52,4 @@ Feature: ShoppingCart management
   #Then validar que actualiza el precio sub total
 
   Scenario: Verificar que el carrito esté vacío inicialmente
-  Then Validarr que el carrito debería estar vacío
+    Then Validarr que el carrito debería estar vacío

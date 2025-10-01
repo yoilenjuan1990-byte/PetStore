@@ -3,6 +3,7 @@ package Steps;
 import Interface.PetNavigationItemIdManager;
 import Interface.PricePetManager;
 import Pages.*;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,6 +11,7 @@ import io.cucumber.java.en.When;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 //Define los pasos de Cucumber para navegar, seleccionar productos, validar páginas, guardar precios, etc.
 
@@ -117,5 +119,18 @@ public class PetFeatureSteps {
         * }
         * */
         cart.validateCartTotalMatches(sumaEsperada);
+    }
+
+    @And("Validar que se muestren los siguientes productos")
+    public void validarQueSeMuestrenLosSiguientesProductos(DataTable dataTable) {
+        // Obtener la lista de productos desde la tabla de datos
+        List<Map<String, String>> productos = dataTable.asMaps(String.class, String.class);
+        
+        // Recorrer cada producto y validarlo en el carrito
+        for (Map<String, String> producto : productos) {
+            String productId = producto.get("Producto").replace("\"", ""); // Remover comillas
+            cart.validateProductInCart(productId);
+            System.out.println("✓ Producto validado en el carrito: " + productId);
+        }
     }
 }
