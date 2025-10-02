@@ -18,8 +18,7 @@ import java.util.Map;
 public class PetFeatureSteps {
     PageBoard pb = new PageBoard();
     ShoppingCartPage cart = new ShoppingCartPage();
-    PricePetManager priceManager;
-    PetNavigationItemIdManager petNavItemIdManag;
+
     List<Double> preciosGuardados = new ArrayList<>();
 
 
@@ -76,8 +75,8 @@ public class PetFeatureSteps {
 
     @And("Save price on Item Id Page")
     public void savePriceOnItemIdPage() {
-        priceManager.guardarPrecio();
-        preciosGuardados.add(priceManager.getPrecioGuardado());
+        fishItemIdPage.guardarPrecio();
+        preciosGuardados.add(fishItemIdPage.getPrecioGuardado());
     }
 
 
@@ -88,7 +87,7 @@ public class PetFeatureSteps {
 
     @And("Click on Add to Cart Button")
     public void clickOnAddToCartButton() {
-        petNavItemIdManag.clickOnAddToCart();
+        fishItemIdPage.clickOnAddToCart();
     }
 
     @And("Back to main page")
@@ -104,7 +103,7 @@ public class PetFeatureSteps {
 
     @And("Validar que el precio del producto {string} en el carrito es el mismo que en item page")
     public void validarQueElPrecioDelProductoEnElCarritoEsElMismoQueEnItemPage(String prodID) {
-        double expectedPrice = priceManager.getPrecioGuardado();
+        double expectedPrice = fishItemIdPage.getPrecioGuardado();
         cart.validateCartTotalMatches(prodID, expectedPrice);
     }
 

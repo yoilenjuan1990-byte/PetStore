@@ -48,8 +48,8 @@ Feature: ShoppingCart management
 
   Scenario: validar que se actualiza el precio total al modificar la cantidad de un item en el carrito con el boton "update cart"
 
-  Scenario: validar boton "Remove" para eliminar un item
+  Scenario: Eliminar un item del carrito con el boton "Remove"
   #Then validar que actualiza el precio sub total
 
-  Scenario: Verificar que el carrito esté vacío inicialmente
-    Then Validarr que el carrito debería estar vacío
+  Scenario: Verificar que el carrito este vacio inicialmente
+    Then Validar que el carrito debería estar vacío
