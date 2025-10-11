@@ -7,8 +7,8 @@ import org.openqa.selenium.By;
 public class ShoppingCartPage extends Configurations {
     // Localizadores
     private By cartTable = By.xpath("//table[@id='Cart']");
-    private By cartTotal = By.xpath("//td[contains(text(),'Total')]/following-sibling::td");
-    private By emptyCartMessage = By.xpath("//div[contains(text(),'Your cart is empty')]");
+    private By cartTotal = By.xpath("//td[contains(text(),'Total')]/following-sibling::td[5]");
+    private By emptyCartMessage = By.xpath("//b[normalize-space()='Your cart is empty.']");
 
     // Validar que un producto específico está en el carrito
     public void validateProductInCart(String productID) {
@@ -47,7 +47,7 @@ public class ShoppingCartPage extends Configurations {
 
     // Busca dentro de la tabla un producto que el xpath contenga el prodID y toma la celda siguiente que contiene el precio
     private double getProductPriceFromCart(String prodID) {
-        By priceLocator = By.xpath("//td[contains(text(),'" + prodID + "')]/following-sibling::td[1]");
+        By priceLocator = By.xpath("//td[contains(text(),'" + prodID + "')]/following-sibling::td[5]");
         String price = getElementText(priceLocator).replace("$", "").trim();
         return Double.parseDouble(price);
 
@@ -56,7 +56,7 @@ public class ShoppingCartPage extends Configurations {
     public void validateCartTotalMatches(double sumaEsperada) {
         String rawTotal = getElementText(cartTotal).replace("$", "").trim();
         double actualTotal = Double.parseDouble(rawTotal);
-        Assert.assertEquals(actualTotal, sumaEsperada, "El total del carrito no coincide con la suma de los precios guardados.");
+        Assert.assertEquals(actualTotal, sumaEsperada);
 
     }
 
