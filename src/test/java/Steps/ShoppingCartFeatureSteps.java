@@ -1,5 +1,7 @@
 package Steps;
 
+import Interface.PetNavigationItemIdManager;
+import Interface.PricePetManager;
 import Pages.*;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -21,10 +23,20 @@ public class ShoppingCartFeatureSteps {
     BirdsProductIdPage birdsProdIdP = new BirdsProductIdPage();
     FishItemIdPage fishItIdPage = new FishItemIdPage();
 
+    private PricePetManager priceManager;
+    private PetNavigationItemIdManager itemIdManager;
+
+
     @And("Save price on Item Id Page")
-    public void savePriceOnItemIdPage() {
-        fishItIdPage.guardarPrecio();
+    public void savePriceOnItemIdPage(DataTable dataTable) {
+        List<Map<String, String>> items = dataTable.asMaps(String.class, String.class);
+        for (Map<String, String> row : items) {
+            String itemId = row.get("Item ID").trim();
+            fishItIdPage.guardarPrecio(itemId);
+        }
+
         savedPricesList.add(fishItIdPage.getPrecioGuardado());
+
     }
 
     @Then("Validar que se muestra el producto {string} en el carrito")
@@ -40,6 +52,7 @@ public class ShoppingCartFeatureSteps {
 
     @And("Validar monto total en el carrito coincide con la suma de todos los productos")
     public void validarMontoTotalEnElCarrito() {
+        double expectedPriceResult = savedPricesList.get(0);
         double sumaEsperada = savedPricesList.stream().mapToDouble(Double::doubleValue).sum();
         /*
          * alternativa para el stream
@@ -48,7 +61,7 @@ public class ShoppingCartFeatureSteps {
          *     sumaEsperada += precio;
          * }
          * */
-        shoppCart.validateCartTotalMatches(sumaEsperada);
+        shoppCart.validateCartTotalMatches(sumaEsperada, expectedPriceResult);
     }
 
     @And("Validar que se muestren los siguientes productos")

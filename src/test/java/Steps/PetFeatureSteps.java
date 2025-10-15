@@ -25,6 +25,10 @@ public class PetFeatureSteps {
     BirdsProductIdPage birdsProductIdP = new BirdsProductIdPage();
     FishItemIdPage fishItemIdPage = new FishItemIdPage();
 
+    private PricePetManager priceManager;
+    private PetNavigationItemIdManager itemIdManager;
+    private List<Double> savedPricesList = new ArrayList<>();
+    private ShoppingCartPage cartPage = new ShoppingCartPage();
 
     @Given("Acceder a la pagina {string}")
     public void accessPage(String url) {
@@ -38,7 +42,22 @@ public class PetFeatureSteps {
 
     @Given("Click on superior menu {string}")
     public void clickOnSuperiorMenu(String petName) {
+        selectPet(petName);
+    }
+
+    private void selectPet(String petName) {
         pb.ClickOnMenuOption(petName);
+        switch (petName) {
+            case "Fish":
+                priceManager = new FishItemIdPage();
+                itemIdManager = new FishItemIdPage();
+                break;
+            case "Dogs":
+                priceManager = new DogsItemIdPage();
+                itemIdManager = new DogsItemIdPage();
+                break;
+            // Agrega más categorías
+        }
     }
 
     @Then("Validate page {string}")

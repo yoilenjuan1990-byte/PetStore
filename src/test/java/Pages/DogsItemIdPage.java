@@ -25,7 +25,7 @@ public class DogsItemIdPage extends Configurations implements PetNavigationItemI
     }
 
     @Override
-    public void guardarPrecio() {
+    public void guardarPrecio(String itID) {
         String dogPrice = getElementText(dogItemPrice_1);
         dogPrice = dogPrice.replace("$", "").trim();
         this.precioGuardado1 = Double.parseDouble(dogPrice);

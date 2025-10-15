@@ -16,7 +16,7 @@ public class BirdsItemIdPage extends Configurations implements PetNavigationItem
     }
 
     @Override
-    public void guardarPrecio() {
+    public void guardarPrecio(String itID) {
 
     }
 

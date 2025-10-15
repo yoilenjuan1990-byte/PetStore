@@ -19,6 +19,7 @@ public class PageBoard extends Configurations {
     private By imageLocatorBirds = By.xpath("//img[@src='../images/sm_birds.gif']");
     private By returnToMainPage = By.linkText("Return to Main Menu");
 
+
     public void accessPageURL(String url) {
         accederAPagina(url);
     }

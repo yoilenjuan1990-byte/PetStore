@@ -5,9 +5,12 @@ import org.testng.Assert;
 import org.openqa.selenium.By;
 
 public class ShoppingCartPage extends Configurations {
+    String expectedPrice = "$16.50";
+
     // Localizadores
     private By cartTable = By.xpath("//table[@id='Cart']");
-    private By cartTotal = By.xpath("//td[contains(text(),'Total')]/following-sibling::td[5]");
+    private By cartTotal = By.xpath("//td[normalize-space()='"+expectedPrice+"']");
+
     private By emptyCartMessage = By.xpath("//b[normalize-space()='Your cart is empty.']");
 
     // Validar que un producto específico está en el carrito
@@ -53,7 +56,8 @@ public class ShoppingCartPage extends Configurations {
 
     }
 
-    public void validateCartTotalMatches(double sumaEsperada) {
+    public void validateCartTotalMatches(double sumaEsperada, double expectedPriceResult) {
+        expectedPrice = String.valueOf(expectedPriceResult);
         String rawTotal = getElementText(cartTotal).replace("$", "").trim();
         double actualTotal = Double.parseDouble(rawTotal);
         Assert.assertEquals(actualTotal, sumaEsperada);

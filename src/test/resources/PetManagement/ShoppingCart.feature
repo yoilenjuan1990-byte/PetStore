@@ -11,6 +11,9 @@ Feature: ShoppingCart management
     Given Click on superior menu "Fish"
     When Click on id product "FI-SW-01"
     And Save price on Item Id Page
+    |Item ID|
+    |  EST-1|
+   # |  EST-2|
     And Click on Add to Cart Button
     Then Validar que se muestra el producto "FI-SW-01" en el carrito
     And Validar que el precio del producto "FI-SW-01" en el carrito es el mismo que en item page

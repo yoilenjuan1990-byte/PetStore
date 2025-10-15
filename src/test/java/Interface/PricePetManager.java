@@ -4,7 +4,7 @@ package Interface;
 
 public interface PricePetManager {
 
-    void guardarPrecio();
+    void guardarPrecio(String itmID);
 
     double getPrecioGuardado();
 }
