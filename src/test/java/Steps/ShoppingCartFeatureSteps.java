@@ -22,6 +22,7 @@ public class ShoppingCartFeatureSteps {
     CatsProductIdPage catsProdIdP = new CatsProductIdPage();
     BirdsProductIdPage birdsProdIdP = new BirdsProductIdPage();
     FishItemIdPage fishItIdPage = new FishItemIdPage();
+    DogsItemIdPage dogsItPage = new DogsItemIdPage();
 
     private PricePetManager priceManager;
     private PetNavigationItemIdManager itemIdManager;
@@ -32,11 +33,32 @@ public class ShoppingCartFeatureSteps {
         List<Map<String, String>> items = dataTable.asMaps(String.class, String.class);
         for (Map<String, String> row : items) {
             String itemId = row.get("Item ID").trim();
-            fishItIdPage.guardarPrecio(itemId);
+            guardarPrecioItemId(itemId);
         }
 
-        savedPricesList.add(fishItIdPage.getPrecioGuardado());
+    }
 
+    private void guardarPrecioItemId(String itemId) {
+        switch (itemId) {
+            case "EST-1":
+            case "EST-2":
+            case "EST-3":
+            case "EST-4":
+            case "EST-5":
+            case "EST-20":
+            case "EST-21":
+                fishItIdPage.guardarPrecio(itemId);
+                savedPricesList.add(fishItIdPage.getPrecioGuardado());
+                break;
+            case "EST-6":
+            case "EST-7":
+            case "EST-8":
+                dogsItPage.guardarPrecio(itemId);
+                savedPricesList.add(dogsItPage.getPrecioGuardado());
+                break;
+            default:
+                System.out.println("La mascota no existe..");
+        }
     }
 
     @Then("Validar que se muestra el producto {string} en el carrito")
@@ -46,21 +68,23 @@ public class ShoppingCartFeatureSteps {
 
     @And("Validar que el precio del producto {string} en el carrito es el mismo que en item page")
     public void validarQueElPrecioDelProductoEnElCarritoEsElMismoQueEnItemPage(String prodID) {
-        double expectedPrice = fishItIdPage.getPrecioGuardado();
+        double expectedPrice = 0.0;
+        switch (prodID) {
+            case "FI-SW-01":
+                expectedPrice = fishItIdPage.getPrecioGuardado();
+                break;
+            case "K9-BD-01":
+                expectedPrice = dogsItPage.getPrecioGuardado();
+                break;
+            default:
+                System.out.println("El producto no esta en el carrito.");
+        }
         shoppCart.validateCartTotalMatches(prodID, expectedPrice);
     }
 
-    @And("Validar monto total en el carrito coincide con la suma de todos los productos")
-    public void validarMontoTotalEnElCarrito() {
-        double expectedPriceResult = savedPricesList.get(0);
+    @And("Validar monto total en el carrito coincide con la suma de todos los productos {double}")
+    public void validarMontoTotalEnElCarrito(double expectedPriceResult) {
         double sumaEsperada = savedPricesList.stream().mapToDouble(Double::doubleValue).sum();
-        /*
-         * alternativa para el stream
-         * double sumaEsperada = 0.0;
-         * for (Double precio : preciosGuardados) {
-         *     sumaEsperada += precio;
-         * }
-         * */
         shoppCart.validateCartTotalMatches(sumaEsperada, expectedPriceResult);
     }
 
@@ -80,5 +104,10 @@ public class ShoppingCartFeatureSteps {
     @Then("Validar Si esta el mensaje {string}")
     public void validarSiEstaElMensaje(String emptyCartMsg) {
         shoppCart.validateCartIsEmpty();
+    }
+
+    @And("Click on Remove button")
+    public void clickOnRemoveButton() throws InterruptedException {
+        shoppCart.clickAllRemoveButtons();
     }
 }

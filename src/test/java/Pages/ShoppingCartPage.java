@@ -1,15 +1,18 @@
 package Pages;
 
 import Configuration.Configurations;
+import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.openqa.selenium.By;
+
+import java.util.List;
 
 public class ShoppingCartPage extends Configurations {
     String expectedPrice = "$16.50";
 
     // Localizadores
     private By cartTable = By.xpath("//table[@id='Cart']");
-    private By cartTotal = By.xpath("//td[normalize-space()='"+expectedPrice+"']");
+    private By cartTotal = By.xpath("//td[contains(text(),'Sub Total: $')]");
 
     private By emptyCartMessage = By.xpath("//b[normalize-space()='Your cart is empty.']");
 
@@ -58,10 +61,30 @@ public class ShoppingCartPage extends Configurations {
 
     public void validateCartTotalMatches(double sumaEsperada, double expectedPriceResult) {
         expectedPrice = String.valueOf(expectedPriceResult);
-        String rawTotal = getElementText(cartTotal).replace("$", "").trim();
-        double actualTotal = Double.parseDouble(rawTotal);
+        String rawTotal = getElementText(cartTotal);
+        String[] parts = rawTotal.split("\\$");
+        String priceText = parts[1].split(" ")[0]; // "35.00"
+
+        double actualTotal = Double.parseDouble(priceText);
         Assert.assertEquals(actualTotal, sumaEsperada);
 
+    }
+
+    public void clickAllRemoveButtons() throws InterruptedException {
+        List<WebElement> removeButtons = driver.findElements(By.xpath("//a[contains(@href,'removeItemFromCart') and text()='Remove']"));
+
+        if (removeButtons.isEmpty()) {
+            System.out.println("⚠️ No hay botones Remove en el carrito.");
+            return;
+        }
+
+        for (WebElement button : removeButtons) {
+            button.click();
+            // Espera breve para evitar conflictos de DOM si se recarga
+            Thread.sleep(500);
+        }
+
+        System.out.println("✓ Se clickeó en todos los botones Remove del carrito.");
     }
 
 }
