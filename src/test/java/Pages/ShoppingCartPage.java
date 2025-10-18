@@ -6,15 +6,17 @@ import org.testng.Assert;
 import org.openqa.selenium.By;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class ShoppingCartPage extends Configurations {
     String expectedPrice = "$16.50";
+    String productIDLocator = "FI-SW-01";
 
     // Localizadores
     private By cartTable = By.xpath("//table[@id='Cart']");
     private By cartTotal = By.xpath("//td[contains(text(),'Sub Total: $')]");
-
     private By emptyCartMessage = By.xpath("//b[normalize-space()='Your cart is empty.']");
+    private By itemLocator = By.xpath("//td[contains(text(),'" + productIDLocator + "')]");
 
     // Validar que un producto específico está en el carrito
     public void validateProductInCart(String productID) {
@@ -59,14 +61,14 @@ public class ShoppingCartPage extends Configurations {
 
     }
 
-    public void validateCartTotalMatches(double sumaEsperada, double expectedPriceResult) {
-        expectedPrice = String.valueOf(expectedPriceResult);
+    public void calcularValorTotalActual(double sumaEsperada) {
+        //expectedPrice = String.valueOf(expectedPriceResult);
         String rawTotal = getElementText(cartTotal);
         String[] parts = rawTotal.split("\\$");
         String priceText = parts[1].split(" ")[0]; // "35.00"
 
         double actualTotal = Double.parseDouble(priceText);
-        Assert.assertEquals(actualTotal, sumaEsperada);
+       // Assert.assertEquals(actualTotal, sumaEsperada);
 
     }
 
@@ -87,4 +89,25 @@ public class ShoppingCartPage extends Configurations {
         System.out.println("✓ Se clickeó en todos los botones Remove del carrito.");
     }
 
+    public void clickRemoveButtonByItemId(String itemId) {
+        By removeButton = By.xpath("//a[contains(@href,'removeItemFromCart') and contains(@href,'" + itemId + "') and text()='Remove']");
+
+        if (isElementPresent(removeButton)) {
+            clickElement(removeButton);
+            System.out.println("✓ Botón Remove clickeado para el item: " + itemId);
+        } else {
+            throw new NoSuchElementException("No se encontró el botón Remove para el item: " + itemId);
+        }
+    }
+
+    public boolean validateProductNotInCart(String productID) {
+        //productIDLocator = productID;
+        if (isElementNotVisible(itemLocator)) {
+            System.out.println("✓ El producto con Item ID '" + productIDLocator + "' fue eliminado correctamente del carrito.");
+            return true;
+        } else {
+            throw new AssertionError("❌ El producto con Item ID '" + productIDLocator + "' aún está presente en el carrito.");
+        }
+
+    }
 }

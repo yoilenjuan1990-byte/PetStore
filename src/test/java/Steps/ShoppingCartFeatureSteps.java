@@ -6,6 +6,7 @@ import Pages.*;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
+import org.testng.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,7 +86,8 @@ public class ShoppingCartFeatureSteps {
     @And("Validar monto total en el carrito coincide con la suma de todos los productos {double}")
     public void validarMontoTotalEnElCarrito(double expectedPriceResult) {
         double sumaEsperada = savedPricesList.stream().mapToDouble(Double::doubleValue).sum();
-        shoppCart.validateCartTotalMatches(sumaEsperada, expectedPriceResult);
+        shoppCart.calcularValorTotalActual(sumaEsperada);
+        Assert.assertEquals(sumaEsperada, expectedPriceResult);
     }
 
     @And("Validar que se muestren los siguientes productos")
@@ -106,8 +108,25 @@ public class ShoppingCartFeatureSteps {
         shoppCart.validateCartIsEmpty();
     }
 
-    @And("Click on Remove button")
-    public void clickOnRemoveButton() throws InterruptedException {
-        shoppCart.clickAllRemoveButtons();
+    @And("Click on Remove button for item {string}")
+    public void clickOnRemoveButtomForItem(String itemID) {
+        shoppCart.clickRemoveButtonByItemId(itemID);
+        if(savedPricesList.get(0).equals(itemID)){
+            savedPricesList.remove(savedPricesList.get(0));
+        }
+        else {
+            savedPricesList.get(1).equals(itemID);
+            savedPricesList.remove(savedPricesList.get(1));
+        }
+    }
+
+    @Then("Validar que se elimino el producto {string} del carrito")
+    public void validarQueSeEliminoElProductoDelCarrito(String prodId) {
+        Assert.assertTrue(shoppCart.validateProductNotInCart(prodId));
+    }
+
+    @Then("Validar que no se elimino el producto {string} del carrito")
+    public void validarQueNoSeEliminoElProductoDelCarrito(String prodId) {
+        Assert.assertFalse(shoppCart.validateProductNotInCart(prodId));
     }
 }

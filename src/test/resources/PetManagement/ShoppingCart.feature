@@ -53,9 +53,27 @@ Feature: ShoppingCart management
     When Click on superior menu "Fish"
     And Click on id product "FI-SW-01"
     And Click on Add to Cart Button
-    And Validar monto total en el carrito coincide con la suma de todos los productos 16.50
-    And Click on Remove button
+    And Click on Remove button for item "EST-1"
+    Then Validar que se elimino el producto "FI-SW-01" del carrito
     Then Validar monto total en el carrito coincide con la suma de todos los productos 0.00
+
+
+  Scenario: Eliminar un item del carrito  con el boton "Remove" y mantener otros productos
+    When Click on superior menu "Fish"
+    And Click on id product "FI-SW-01"
+    And Save price on Item Id Page
+      | Item ID |
+      | EST-1   |
+    And Click on Add to Cart Button
+    Then Click on superior menu "Dogs"
+    And Click on id product "K9-BD-01"
+    And Save price on Item Id Page
+      | Item ID |
+      | EST-6   |
+    And Click on Add to Cart Button
+    And Click on Remove button for item "EST-1"
+    Then Validar que se elimino el producto "FI-SW-01" del carrito
+    Then Validar monto total en el carrito coincide con la suma de todos los productos 18.50
 
 
   Scenario: Verificar que el carrito este vacio inicialmente
