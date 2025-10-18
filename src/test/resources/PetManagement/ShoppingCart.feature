@@ -49,14 +49,6 @@ Feature: ShoppingCart management
     And Validar que boton "Proceed to Checkout" no está visible
 
 
-  Scenario: validar valor total al comprar 2 mascotas del mismo tipo
-
-  Scenario: validar valor total al comprar 2 mascotas diferentes
-
-  Scenario: validar que se actualiza el precio total al modificar la cantidad de un item en el carrito con enter
-
-  Scenario: validar que se actualiza el precio total al modificar la cantidad de un item en el carrito con el boton "update cart"
-
   Scenario: Eliminar un item del carrito con el boton "Remove"
     When Click on superior menu "Fish"
     And Click on id product "FI-SW-01"
