@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'idea'
 }
 
 group = 'org.example'
@@ -89,6 +90,11 @@ dependencies {
     testImplementation 'org.testng:testng:7.10.2'
 }
 
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
 test {
     useJUnitPlatform()
+    systemProperty 'file.encoding', 'UTF-8'
 }

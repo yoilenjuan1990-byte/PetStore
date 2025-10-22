@@ -1,0 +1,6 @@
+username,password,firstName,lastName,email,phone,address1,city,state,zip,country
+csvUser01,SecurePass123!,Alice,Johnson,alice.johnson@csvtest.com,555-1001,100 Oak St,Chicago,IL,60601,USA
+csvUser02,TestPass456!,Bob,Williams,bob.williams@csvtest.com,555-1002,200 Pine Ave,Seattle,WA,98101,USA
+csvUser03,DataPass789!,Charlie,Brown,charlie.brown@csvtest.com,555-1003,300 Maple Dr,Austin,TX,73301,USA
+csvUser04,CsvTest321!,Diana,Garcia,diana.garcia@csvtest.com,555-1004,400 Cedar Ln,Boston,MA,02101,USA
+csvUser05,FileData555!,Edward,Martinez,edward.martinez@csvtest.com,555-1005,500 Elm Blvd,Miami,FL,33101,USA

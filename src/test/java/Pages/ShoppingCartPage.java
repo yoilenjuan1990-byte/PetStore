@@ -76,7 +76,7 @@ public class ShoppingCartPage extends Configurations {
         List<WebElement> removeButtons = driver.findElements(By.xpath("//a[contains(@href,'removeItemFromCart') and text()='Remove']"));
 
         if (removeButtons.isEmpty()) {
-            System.out.println("⚠️ No hay botones Remove en el carrito.");
+            System.out.println("WARNING: No hay botones Remove en el carrito.");
             return;
         }
 
@@ -86,7 +86,7 @@ public class ShoppingCartPage extends Configurations {
             Thread.sleep(500);
         }
 
-        System.out.println("✓ Se clickeó en todos los botones Remove del carrito.");
+        System.out.println("SUCCESS: Se clickeo en todos los botones Remove del carrito.");
     }
 
     public void clickRemoveButtonByItemId(String itemId) {
@@ -94,7 +94,7 @@ public class ShoppingCartPage extends Configurations {
 
         if (isElementPresent(removeButton)) {
             clickElement(removeButton);
-            System.out.println("✓ Botón Remove clickeado para el item: " + itemId);
+            System.out.println("SUCCESS: Boton Remove clickeado para el item: " + itemId);
         } else {
             throw new NoSuchElementException("No se encontró el botón Remove para el item: " + itemId);
         }
@@ -103,10 +103,10 @@ public class ShoppingCartPage extends Configurations {
     public boolean validateProductNotInCart(String productID) {
         //productIDLocator = productID;
         if (isElementNotVisible(itemLocator)) {
-            System.out.println("✓ El producto con Item ID '" + productIDLocator + "' fue eliminado correctamente del carrito.");
+            System.out.println("SUCCESS: El producto con Item ID '" + productIDLocator + "' fue eliminado correctamente del carrito.");
             return true;
         } else {
-            throw new AssertionError("❌ El producto con Item ID '" + productIDLocator + "' aún está presente en el carrito.");
+            throw new AssertionError("ERROR: El producto con Item ID '" + productIDLocator + "' aun esta presente en el carrito.");
         }
 
     }
