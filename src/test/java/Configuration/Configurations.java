@@ -270,5 +270,7 @@ public class Configurations {
         String nombreImagen = nombre.replace("sm_", "").replace(".gif", "");
         return nombreImagen;
     }
-
+    public boolean currentURLContains(String fragment) {
+        return driver.getCurrentUrl().contains(fragment);
+    }
 }

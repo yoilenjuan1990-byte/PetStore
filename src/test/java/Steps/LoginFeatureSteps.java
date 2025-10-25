@@ -1,7 +1,7 @@
 package Steps.Login;
 
-import Page.HomePage;
-import Page.LoginPage;
+import Pages.HomePage;
+import Pages.LoginPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;

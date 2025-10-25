@@ -1,9 +1,10 @@
-package Page;
+package Pages;
 
-import Configuration.Configuracion;
+
+import Configuration.Configurations;
 import org.openqa.selenium.By;
 
-public class RegisterPage extends Configuracion {
+public class RegisterPage extends Configurations {
 
     // Locators para el formulario de registro
     private By userIdField = By.name("username");
