@@ -48,7 +48,7 @@ public class LoginFeatureSteps {
     public void verifyThatTheCurrentURL(String fragment) {
         //Assert.assertTrue("La URL actual no contiene: " + fragment,
         //pb.verifyCurrentUrl(fragment));
-        String currentUrl = pb.getCurrentURL();
+        String currentUrl = pb.currentURL();
         System.out.println("DEBUG Current URL: " + currentUrl);
         // Ignorar el jsessionid si está presente
         String normalizedUrl = currentUrl.replaceAll(";jsessionid=[^?]*", "");
