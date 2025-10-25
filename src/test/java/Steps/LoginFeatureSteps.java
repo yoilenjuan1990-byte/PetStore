@@ -1,26 +1,26 @@
 package Steps.Login;
 
-import Pages.HomePage;
 import Pages.LoginPage;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import org.junit.Assert;
+import Pages.PageBoard;
 
 public class LoginFeatureSteps {
 
-    HomePage homePage = new HomePage();
+    PageBoard pb = new PageBoard();
     LoginPage loginPage = new LoginPage();
 
     @Given("Access to the page {string}")
     public void accessToThePage(String url) {
-        homePage.accessToPage(url);
+        pb.accessPageURL(url);
     }
 
     @And("Verify that {string} is visible")
     public void verifyThatIsVisible(String element) {
-        String resultadObtenido = homePage.obtenerElementoVisible(element);
-        Assert.assertTrue(homePage.verifyElementoVisible(element));
+        String resultadObtenido = pb.obtenerElementoVisible(element);
+        Assert.assertTrue(pb.verifyElementoVisible(element));
         Assert.assertEquals(element, resultadObtenido);
     }
 
@@ -30,7 +30,7 @@ public class LoginFeatureSteps {
         if ("Login".equalsIgnoreCase(buttonText)) {
             clickable = loginPage.isLoginButtonClickable();
         } else {
-            clickable = homePage.isButtonClickable(buttonText);
+            clickable = pb.isButtonClickable(buttonText);
         }
         Assert.assertTrue("El botón no es clickable: " + buttonText, clickable);
     }
@@ -40,15 +40,15 @@ public class LoginFeatureSteps {
         if ("Login".equalsIgnoreCase(buttonText)) {
             loginPage.clickLoginButton();
         } else {
-            homePage.clickButton(buttonText);
+            pb.clickButton(buttonText);
         }
     }
 
     @And("Verify that the currentURL {string}")
     public void verifyThatTheCurrentURL(String fragment) {
         //Assert.assertTrue("La URL actual no contiene: " + fragment,
-        //homePage.verifyCurrentUrl(fragment));
-        String currentUrl = homePage.getCurrentURL();
+        //pb.verifyCurrentUrl(fragment));
+        String currentUrl = pb.getCurrentURL();
         System.out.println("DEBUG Current URL: " + currentUrl);
         // Ignorar el jsessionid si está presente
         String normalizedUrl = currentUrl.replaceAll(";jsessionid=[^?]*", "");
