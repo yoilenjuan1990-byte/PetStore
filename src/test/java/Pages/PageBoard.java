@@ -115,4 +115,9 @@ public class PageBoard extends Configurations {
     public void clickButton(String buttonName) {
         clickElement(getMenuLink(buttonName));
     }
+
+
+    public String currentURL() {
+    return getCurrentUrlResult();
+    }
 }

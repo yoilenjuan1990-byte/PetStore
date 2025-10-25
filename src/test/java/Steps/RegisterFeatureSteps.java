@@ -1,8 +1,9 @@
-package Steps.Register;
+package Steps;
 
-import Page.HomePage;
-import Page.LoginPage;
-import Page.RegisterPage;
+
+import Pages.LoginPage;
+import Pages.PageBoard;
+import Pages.RegisterPage;
 import Utils.CSVDataReader;
 import Utils.TestDataGenerator;
 import io.cucumber.java.en.And;
@@ -16,7 +17,7 @@ import java.util.Map;
 
 public class RegisterFeatureSteps {
 
-    HomePage homePage = new HomePage();
+    PageBoard pb = new PageBoard();
     RegisterPage registerPage = new RegisterPage();
     LoginPage loginPage = new LoginPage();
 
@@ -119,11 +120,11 @@ public class RegisterFeatureSteps {
 
     @And("Verify that the currentURL after register contains {string}")
     public void verifyThatTheCurrentURLAfterRegisterContains(String expectedUrl) {
-        String currentUrl = homePage.getCurrentURL();
-        System.out.println("DEBUG Current URL after register: " + currentUrl);
+        String url = pb.currentURL();
+        System.out.println("DEBUG Current URL after register: " + url);
 
         // Normalizar la URL eliminando jsessionid si existe
-        String normalizedUrl = currentUrl.replaceAll(";jsessionid=[^?]*", "");
+        String normalizedUrl = url.replaceAll(";jsessionid=[^?]*", "");
 
         Assert.assertTrue("La URL actual no contiene: " + expectedUrl,
                 normalizedUrl.contains(expectedUrl));
@@ -212,7 +213,7 @@ public class RegisterFeatureSteps {
     @When("I click the {string} link")
     public void iClickTheLink(String linkText) {
         if ("Sign Out".equalsIgnoreCase(linkText)) {
-            homePage.clickButton(linkText);
+            pb.clickButton(linkText);
         }
     }
 
