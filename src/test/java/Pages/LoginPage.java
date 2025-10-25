@@ -29,9 +29,8 @@ public class LoginPage extends Configurations {
     }
 
     public boolean verifyCurrentUrl(String expectedUrl) {
-        //   return getCurrentURL().contains(expectedUrl);
-        return getCurrentUrlResult(expectedUrl);
-    }
+           return getCurrentUrlResult().contains(expectedUrl);
+       }
 
     public String getErrorMessage() {
         String text = getElementText(errorMessage);
