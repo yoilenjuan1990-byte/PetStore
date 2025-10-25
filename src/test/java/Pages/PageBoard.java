@@ -19,6 +19,10 @@ public class PageBoard extends Configurations {
     private By imageLocatorBirds = By.xpath("//img[@src='../images/sm_birds.gif']");
     private By returnToMainPage = By.linkText("Return to Main Menu");
 
+    // Devuelve el locator dinámico según el texto del enlace (Pasarlo a la clase Configuration y hacerlo reutilizable en PB)
+    private By getMenuLink(String linkText) {
+        return By.xpath("//*[@id='MenuContent']//a[text()='" + linkText + "']");
+    }
 
     public void accessPageURL(String url) {
         accederAPagina(url);
@@ -92,4 +96,23 @@ public class PageBoard extends Configurations {
         clickElement(returnToMainPage);
     }
 
+    // Verifica que un enlace del menú es visible *
+    public boolean verifyElementoVisible(String element) {
+        return getElementText(getMenuLink(element)).equals(element);
+    }
+
+    // Devuelve el texto visible de un enlace *
+    public String obtenerElementoVisible(String element) {
+        return getElementText(getMenuLink(element));
+    }
+
+    // Verifica que un botón/enlace es clickable *
+    public boolean isButtonClickable(String buttonText) {
+        return waitForClickableElement(getMenuLink(buttonText)).isDisplayed();
+    }
+
+    // Hace click en un enlace del menú *
+    public void clickButton(String buttonName) {
+        clickElement(getMenuLink(buttonName));
+    }
 }
