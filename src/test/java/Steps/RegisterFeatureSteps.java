@@ -6,6 +6,7 @@ import Pages.PageBoard;
 import Pages.RegisterPage;
 import Utils.CSVDataReader;
 import Utils.TestDataGenerator;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -145,7 +146,7 @@ public class RegisterFeatureSteps {
     }
 
     @Given("I generate random user data with specifications:")
-    public void iGenerateRandomUserDataWithSpecifications(io.cucumber.datatable.DataTable dataTable) {
+    public void iGenerateRandomUserDataWithSpecifications(DataTable dataTable) {
         // Convertir la tabla a un mapa
         Map<String, String> specs = dataTable.asMap(String.class, String.class);
 
