@@ -100,14 +100,14 @@ Feature: User Registration
   # Data-Driven Testing: Usar datos aleatorios con especificaciones personalizadas
   Scenario: Register Success with Custom Specifications
     Given I generate random user data with specifications:
-      | username_min_length          | 2     |
-      | username_max_length          | 20    |
-      | username_allow_special_chars | true  |
-      | password_length              | 15    |
-      | password_uppercase           | true  |
-      | password_lowercase           | true  |
-      | password_special_chars       | true  |
-      | password_numbers             | false |
+      | username_min_length          | 2    |
+      | username_max_length          | 20   |
+      | username_allow_special_chars | true |
+      | password_length              | 15   |
+      | password_uppercase           | true |
+      | password_lowercase           | true |
+      | password_special_chars       | true |
+      | password_numbers             |      |
     And I fill the registration form with random data
     And I click the "Save Account Information" button
     Then Verify successful registration message is displayed
