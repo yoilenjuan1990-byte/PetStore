@@ -144,6 +144,46 @@ public class RegisterFeatureSteps {
         System.out.println("Generated random user: " + randomUserData.username);
     }
 
+    @Given("I generate random user data with specifications:")
+    public void iGenerateRandomUserDataWithSpecifications(io.cucumber.datatable.DataTable dataTable) {
+        // Convertir la tabla a un mapa
+        Map<String, String> specs = dataTable.asMap(String.class, String.class);
+
+        // Obtener especificaciones del username
+        int usernameMinLength = Integer.parseInt(specs.getOrDefault("username_min_length", "2"));
+        int usernameMaxLength = Integer.parseInt(specs.getOrDefault("username_max_length", "20"));
+        boolean usernameAllowSpecialChars = Boolean.parseBoolean(specs.getOrDefault("username_allow_special_chars", "true"));
+
+        // Obtener especificaciones del password
+        int passwordLength = Integer.parseInt(specs.getOrDefault("password_length", "15"));
+        boolean passwordUppercase = Boolean.parseBoolean(specs.getOrDefault("password_uppercase", "true"));
+        boolean passwordLowercase = Boolean.parseBoolean(specs.getOrDefault("password_lowercase", "true"));
+        boolean passwordSpecialChars = Boolean.parseBoolean(specs.getOrDefault("password_special_chars", "true"));
+        boolean passwordNumbers = Boolean.parseBoolean(specs.getOrDefault("password_numbers", "true"));
+
+        // Generar username y password personalizados
+        String username = TestDataGenerator.generateCustomUsername(usernameMinLength, usernameMaxLength, usernameAllowSpecialChars);
+        String password = TestDataGenerator.generateSecurePassword(passwordLength, passwordUppercase, passwordLowercase, passwordSpecialChars, passwordNumbers);
+
+        // Crear objeto de datos de usuario completo
+        randomUserData = new TestDataGenerator.UserTestData(
+                username,
+                password,
+                TestDataGenerator.generateRandomFirstName(),
+                TestDataGenerator.generateRandomLastName(),
+                TestDataGenerator.generateUniqueEmail(),
+                TestDataGenerator.generateRandomPhone(),
+                TestDataGenerator.generateRandomAddress(),
+                TestDataGenerator.generateRandomCity(),
+                TestDataGenerator.generateRandomState(),
+                TestDataGenerator.generateRandomZipCode(),
+                "USA"
+        );
+
+        System.out.println("Generated random user with custom specs: " + randomUserData.username);
+        System.out.println("Password length: " + randomUserData.password.length());
+    }
+
     @Given("I generate random user data for integration")
     public void iGenerateRandomUserDataForIntegration() {
         randomUserData = TestDataGenerator.generateCompleteUserData();

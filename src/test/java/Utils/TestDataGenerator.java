@@ -145,12 +145,94 @@ public class TestDataGenerator {
      * Contiene mayúsculas, minúsculas, números y caracteres especiales
      */
     public static String generateSecurePassword() {
-        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$";
+        return generateSecurePassword(15, true, true, true, true);
+    }
+
+    /**
+     * Genera una contraseña personalizada según especificaciones
+     *
+     * @param length              Longitud de la contraseña
+     * @param includeUppercase    Incluir letras mayúsculas
+     * @param includeLowercase    Incluir letras minúsculas
+     * @param includeSpecialChars Incluir caracteres especiales
+     * @param  includeNumbers     Incluir numeros
+     * @return Contraseña generada
+     */
+    public static String generateSecurePassword(int length, boolean includeUppercase,
+                                                boolean includeLowercase, boolean includeSpecialChars, boolean includeNumbers) {
+        StringBuilder chars = new StringBuilder();
+
+        String uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        String lowercase = "abcdefghijklmnopqrstuvwxyz";
+        String numbers = "0123456789";
+        String specialChars = "!@#$%&*";
+
+        if (includeUppercase) chars.append(uppercase);
+        if (includeLowercase) chars.append(lowercase);
+        if (includeNumbers) chars.append(numbers);
+        if (includeSpecialChars) chars.append(specialChars);
+
         StringBuilder password = new StringBuilder();
-        for (int i = 0; i < 10; i++) {
-            password.append(chars.charAt(random.nextInt(chars.length())));
+
+        // Asegurar que la contraseña contiene al menos uno de cada tipo requerido
+        if (includeUppercase) password.append(uppercase.charAt(random.nextInt(uppercase.length())));
+        if (includeLowercase) password.append(lowercase.charAt(random.nextInt(lowercase.length())));
+        if (includeSpecialChars) password.append(specialChars.charAt(random.nextInt(specialChars.length())));
+        if (includeNumbers) password.append(numbers.charAt(random.nextInt(numbers.length())));
+
+        // Rellenar el resto de la contraseña aleatoriamente
+        String allChars = chars.toString();
+        while (password.length() < length) {
+            password.append(allChars.charAt(random.nextInt(allChars.length())));
         }
-        return password.toString();
+
+        // Mezclar los caracteres para evitar patrones predecibles
+        return shuffleString(password.toString());
+    }
+
+    /**
+     * Genera un username personalizado según especificaciones
+     *
+     * @param minLength         Longitud mínima
+     * @param maxLength         Longitud máxima
+     * @param allowSpecialChars Permitir caracteres especiales
+     * @return Username generado
+     */
+    public static String generateCustomUsername(int minLength, int maxLength, boolean allowSpecialChars) {
+        int length = minLength + random.nextInt(maxLength - minLength + 1);
+        StringBuilder chars = new StringBuilder("abcdefghijklmnopqrstuvwxyz0123456789");
+
+        if (allowSpecialChars) {
+            chars.append("_-.");
+        }
+
+        StringBuilder username = new StringBuilder();
+        String allChars = chars.toString();
+
+        // Asegurar que comience con una letra
+        username.append((char) ('a' + random.nextInt(26)));
+
+        // Rellenar el resto
+        while (username.length() < length) {
+            username.append(allChars.charAt(random.nextInt(allChars.length())));
+        }
+
+        // Agregar timestamp para unicidad
+        return username.toString() + "_" + System.currentTimeMillis() % 10000;
+    }
+
+    /**
+     * Mezcla aleatoriamente los caracteres de un string
+     */
+    private static String shuffleString(String input) {
+        char[] chars = input.toCharArray();
+        for (int i = chars.length - 1; i > 0; i--) {
+            int j = random.nextInt(i + 1);
+            char temp = chars[i];
+            chars[i] = chars[j];
+            chars[j] = temp;
+        }
+        return new String(chars);
     }
 
     /**
@@ -172,8 +254,8 @@ public class TestDataGenerator {
      */
     public static UserTestData generateCompleteUserData() {
         return new UserTestData(
-                generateUniqueUsername(),
-                generateSecurePassword(),
+                generateCustomUsername(2, 20, true), // min 2, max 20, con caracteres especiales
+                generateSecurePassword(15, true, true, true,true), // 15 caracteres, con mayúsculas, minúsculas y especiales
                 generateRandomFirstName(),
                 generateRandomLastName(),
                 generateUniqueEmail(),
