@@ -1,7 +1,15 @@
 package Utils;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -299,5 +307,190 @@ public class TestDataGenerator {
             this.zip = zip;
             this.country = country;
         }
+
+        /**
+         * Convierte los datos del usuario a formato CSV
+         */
+        public String toCSV() {
+            return String.join(",",
+                    username, password, firstName, lastName, email,
+                    phone, address, city, state, zip, country
+            );
+        }
+
+        /**
+         * Convierte los datos del usuario a formato JSON
+         */
+        public String toJSON() {
+            return String.format(
+                    "{\"username\":\"%s\",\"password\":\"%s\",\"firstName\":\"%s\",\"lastName\":\"%s\"," +
+                    "\"email\":\"%s\",\"phone\":\"%s\",\"address\":\"%s\",\"city\":\"%s\"," +
+                    "\"state\":\"%s\",\"zip\":\"%s\",\"country\":\"%s\"}",
+                    username, password, firstName, lastName, email,
+                    phone, address, city, state, zip, country
+            );
+        }
+
+        /**
+         * Convierte los datos del usuario a formato texto legible
+         */
+        public String toReadableText() {
+            return String.format(
+                    "Usuario: %s | Password: %s | Nombre: %s %s | Email: %s | " +
+                    "Teléfono: %s | Dirección: %s, %s, %s %s, %s",
+                    username, password, firstName, lastName, email,
+                    phone, address, city, state, zip, country
+            );
+        }
+    }
+
+    // ========== MÉTODOS PARA GUARDAR DATOS EN ARCHIVOS ==========
+
+    /**
+     * Directorio base para guardar archivos de datos generados
+     */
+    private static final String DATA_OUTPUT_DIR = "src/test/resources/GeneratedTestData";
+
+    /**
+     * Crea el directorio de salida si no existe
+     */
+    private static void ensureOutputDirectoryExists() {
+        try {
+            Path outputPath = Paths.get(DATA_OUTPUT_DIR);
+            if (!Files.exists(outputPath)) {
+                Files.createDirectories(outputPath);
+            }
+        } catch (IOException e) {
+            System.err.println("Error creando directorio de salida: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Guarda un usuario generado en archivo CSV
+     *
+     * @param userData    Datos del usuario a guardar
+     * @param append      true para agregar al archivo, false para sobrescribir
+     * @param filename    Nombre del archivo (sin extensión)
+     */
+    public static void saveUserToCSV(UserTestData userData, boolean append, String filename) {
+        ensureOutputDirectoryExists();
+        String filepath = DATA_OUTPUT_DIR + "/" + filename + ".csv";
+
+        try {
+            Path path = Paths.get(filepath);
+            boolean needsHeader = !Files.exists(path) || (!append && Files.size(path) == 0);
+
+            StandardOpenOption[] options = append ? 
+                new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
+                new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
+            
+            try (BufferedWriter writer = Files.newBufferedWriter(path, options)) {
+
+                // Escribir header si es necesario
+                if (needsHeader) {
+                    writer.write("username,password,firstName,lastName,email,phone,address,city,state,zip,country\n");
+                }
+
+                // Escribir datos del usuario
+                writer.write(userData.toCSV() + "\n");
+            }
+
+            System.out.println("Usuario guardado en CSV: " + filepath);
+        } catch (IOException e) {
+            System.err.println("Error guardando usuario en CSV: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Guarda múltiples usuarios en archivo CSV
+     */
+    public static void saveUsersToCSV(List<UserTestData> users, String filename) {
+        ensureOutputDirectoryExists();
+        String filepath = DATA_OUTPUT_DIR + "/" + filename + ".csv";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filepath))) {
+            // Header
+            writer.write("username,password,firstName,lastName,email,phone,address,city,state,zip,country\n");
+
+            // Datos
+            for (UserTestData user : users) {
+                writer.write(user.toCSV() + "\n");
+            }
+
+            System.out.println(users.size() + " usuarios guardados en CSV: " + filepath);
+        } catch (IOException e) {
+            System.err.println("Error guardando usuarios en CSV: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Guarda un usuario generado en archivo JSON
+     */
+    public static void saveUserToJSON(UserTestData userData, boolean append, String filename) {
+        ensureOutputDirectoryExists();
+        String filepath = DATA_OUTPUT_DIR + "/" + filename + ".json";
+
+        try {
+            Path path = Paths.get(filepath);
+
+            StandardOpenOption[] options = append ? 
+                new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
+                new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
+            
+            try (BufferedWriter writer = Files.newBufferedWriter(path, options)) {
+
+                writer.write(userData.toJSON() + "\n");
+            }
+
+            System.out.println("Usuario guardado en JSON: " + filepath);
+        } catch (IOException e) {
+            System.err.println("Error guardando usuario en JSON: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Guarda un usuario en formato texto legible
+     */
+    public static void saveUserToTextFile(UserTestData userData, boolean append, String filename) {
+        ensureOutputDirectoryExists();
+        String filepath = DATA_OUTPUT_DIR + "/" + filename + ".txt";
+
+        try {
+            Path path = Paths.get(filepath);
+
+            StandardOpenOption[] options = append ? 
+                new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.APPEND} :
+                new StandardOpenOption[]{StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING};
+            
+            try (BufferedWriter writer = Files.newBufferedWriter(path, options)) {
+
+                // Agregar timestamp
+                writer.write("[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "] ");
+                writer.write(userData.toReadableText() + "\n");
+            }
+
+            System.out.println("Usuario guardado en TXT: " + filepath);
+        } catch (IOException e) {
+            System.err.println("Error guardando usuario en TXT: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Método de conveniencia para guardar en todos los formatos
+     */
+    public static void saveUserToAllFormats(UserTestData userData, String baseFilename) {
+        String timestamp = generateTimestamp();
+        saveUserToCSV(userData, true, baseFilename + "_" + timestamp);
+        saveUserToJSON(userData, true, baseFilename + "_" + timestamp);
+        saveUserToTextFile(userData, true, baseFilename + "_" + timestamp);
+    }
+
+    /**
+     * Genera y guarda automáticamente un usuario completo
+     */
+    public static UserTestData generateAndSaveUser(String baseFilename) {
+        UserTestData userData = generateCompleteUserData();
+        saveUserToAllFormats(userData, baseFilename);
+        return userData;
     }
 }

@@ -277,4 +277,36 @@ public class RegisterFeatureSteps {
         Assert.assertTrue("La URL actual no contiene: " + expectedUrl,
                 normalizedUrl.contains(expectedUrl));
     } */
+
+    // ========== Steps para guardar datos de usuarios generados ==========
+
+    @And("I save the generated user data to CSV file {string}")
+    public void iSaveTheGeneratedUserDataToCSVFile(String filename) {
+        Assert.assertNotNull("No hay datos de usuario generados para guardar", randomUserData);
+        TestDataGenerator.saveUserToCSV(randomUserData, true, filename);
+    }
+
+    @And("I save the generated user data to JSON file {string}")
+    public void iSaveTheGeneratedUserDataToJSONFile(String filename) {
+        Assert.assertNotNull("No hay datos de usuario generados para guardar", randomUserData);
+        TestDataGenerator.saveUserToJSON(randomUserData, true, filename);
+    }
+
+    @And("I save the generated user data to text file {string}")
+    public void iSaveTheGeneratedUserDataToTextFile(String filename) {
+        Assert.assertNotNull("No hay datos de usuario generados para guardar", randomUserData);
+        TestDataGenerator.saveUserToTextFile(randomUserData, true, filename);
+    }
+
+    @And("I save the generated user data to all formats with base name {string}")
+    public void iSaveTheGeneratedUserDataToAllFormatsWithBaseName(String baseName) {
+        Assert.assertNotNull("No hay datos de usuario generados para guardar", randomUserData);
+        TestDataGenerator.saveUserToAllFormats(randomUserData, baseName);
+    }
+
+    @Given("I generate and save a complete user with base name {string}")
+    public void iGenerateAndSaveACompleteUserWithBaseName(String baseName) {
+        randomUserData = TestDataGenerator.generateAndSaveUser(baseName);
+        System.out.println("Usuario generado y guardado: " + randomUserData.username);
+    }
 }

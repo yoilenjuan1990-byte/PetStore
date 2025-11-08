@@ -132,3 +132,32 @@ Feature: User Registration
     And I click in the "Sign In" button
     And I login with the registered credentials
     Then Verify that the currentURL after login contains "Catalog.action"
+
+  # Data Persistence: Generar y guardar datos de usuario
+  Scenario: Register Success and Save User Data to CSV
+    Given I generate random user data
+    And I fill the registration form with random data
+    And I click the "Save Account Information" button
+    Then Verify successful registration message is displayed
+    And Verify that the currentURL after register contains "Catalog.action"
+    And I save the generated user data to CSV file "successful_registrations"
+
+  Scenario: Register Success and Save User Data to All Formats
+    Given I generate random user data with specifications:
+      | username_min_length          | 5    |
+      | username_max_length          | 15   |
+      | username_allow_special_chars | false|
+      | password_length              | 12   |
+      | password_uppercase           | true |
+      | password_lowercase           | true |
+      | password_special_chars       | true |
+      | password_numbers             | true |
+    And I fill the registration form with random data
+    And I click the "Save Account Information" button
+    Then Verify successful registration message is displayed
+    And Verify that the currentURL after register contains "Catalog.action"
+    And I save the generated user data to all formats with base name "custom_spec_users"
+
+  Scenario: Generate and Save User Data Without Registration
+    Given I generate and save a complete user with base name "generated_users"
+    # Este escenario solo genera y guarda datos sin hacer registro real
