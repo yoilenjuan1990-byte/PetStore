@@ -111,6 +111,7 @@ Feature: User Registration
     And I fill the registration form with random data
     And I click the "Save Account Information" button
     Then Verify successful registration message is displayed
+    And I save the generated user data to all formats with base name "custom_spec_users"
     And Verify that the currentURL after register contains "Catalog.action"
 
   # Data-Driven Testing: Leer datos desde archivo CSV
