@@ -604,46 +604,169 @@ boolean isSidebarLoaded()                           // Verifica si sidebar carg�
 
 ## ▶️ Ejecución de Pruebas
 
-### Ejecutar todas las pruebas
+### Opción 1: Ejecutar todas las pruebas con Allure (Recomendado)
+```bash
+# Windows PowerShell
+.\gradlew testWithAllure
+
+# Windows CMD
+gradlew.bat testWithAllure
+
+# Linux/Mac
+./gradlew testWithAllure
+```
+
+Este comando:
+- ✅ Limpia resultados anteriores
+- ✅ Ejecuta todos los tests de Cucumber
+- ✅ Genera resultados en `build/allure-results`
+- ✅ Muestra resumen en consola
+
+### Opción 2: Ejecutar tests normales
 ```bash
 ./gradlew test
 ```
 
-### Ejecutar features específicos de Cucumber
+### Opción 3: Ejecutar tests con Tags específicos
+
+Edita `src/test/java/runners/CucumberTestRunner.java` y modifica la línea de tags:
+
+```java
+tags = "@smoke"  // Solo ejecutar tests con @smoke
+tags = "@login or @register"  // Ejecutar tests de login o register
+tags = "not @wip"  // Excluir tests marcados como @wip
+```
+
+Luego ejecuta:
 ```bash
-# Ejecutar solo pruebas de login
-./gradlew test -Dcucumber.filter.tags="@login"
-
-# Ejecutar solo pruebas de registro
-./gradlew test -Dcucumber.filter.tags="@register"
-
-# Ejecutar solo pruebas de carrito
-./gradlew test -Dcucumber.filter.tags="@cart"
+.\gradlew testWithAllure
 ```
 
 ### Ejecutar desde IntelliJ IDEA
 1. Abrir el proyecto en IntelliJ
-2. Navegar a un archivo `.feature` en `src/test/resources/`
-3. Click derecho → Run 'Feature: [nombre]'
+2. Navegar a `src/test/java/runners/CucumberTestRunner.java`
+3. Click derecho → Run 'CucumberTestRunner'
 
-## 📊 Generación de Reportes
+## 📊 Generación de Reportes con Allure
 
-### Reportes Allure
+### 🎉 ¿Por qué Allure Report?
 
-1. **Generar reporte Allure**
-   ```bash
-   ./gradlew allureReport
-   ```
+Allure genera reportes HTML **interactivos y navegables** con:
+- ✅ Dashboard con métricas (pass/fail rate, duración, tendencias)
+- ✅ Navegación por scenarios y features
+- ✅ Screenshots automáticos en fallos
+- ✅ Visualización de cada step de Gherkin
+- ✅ Gráficos y estadísticas
+- ✅ Categorización de errores
+- ✅ Histórico de ejecuciones
 
-2. **Abrir reporte en navegador**
-   ```bash
-   ./gradlew allureServe
-   ```
+### Quick Start - Ver Reporte
+
+```bash
+# Paso 1: Ejecutar tests
+.\gradlew testWithAllure
+
+# Paso 2: Ver reporte en navegador (se abre automáticamente)
+.\gradlew allureServe
+```
+
+**👉 El reporte se abrirá automáticamente en tu navegador en http://localhost:XXXXX**
+
+### Comandos de Allure
+
+#### 1. Ver Reporte Interactivo (Modo Servidor)
+```bash
+.\gradlew allureServe
+```
+- Genera el reporte HTML completo
+- Inicia un servidor local
+- Abre automáticamente en navegador
+- **Recomendado para desarrollo**
+
+#### 2. Generar Reporte Estático (Para Compartir)
+```bash
+.\gradlew allureReport
+```
+- Genera HTML en: `build/reports/allure-report/index.html`
+- Puedes abrir `index.html` directamente
+- Ideal para enviar por email o compartir
+
+#### 3. Limpiar Resultados Anteriores
+```bash
+.\gradlew cleanAllureResults
+```
+
+#### 4. Full Cycle - Todo en uno
+```bash
+.\gradlew clean testWithAllure allureServe
+```
+Limpia, ejecuta tests y abre el reporte.
+
+### Navegación en el Reporte
+
+Cuando abras el reporte de Allure verás:
+
+#### 🏠 Overview (Vista Principal)
+- Total de tests ejecutados
+- Gráficos de pass/fail rate
+- Duración total de ejecución
+- Tendencias (si hay histórico)
+
+#### 📂 Suites
+- Tests organizados por archivos `.feature`
+- Navegación jerárquica
+- Estado de cada scenario
+
+#### 📋 Behaviors
+- Vista BDD (Features > Scenarios > Steps)
+- Estructura de Gherkin
+- Estado de cada step
+
+#### 📈 Graphs
+- Status Chart (distribución de resultados)
+- Severity Chart (prioridades)
+- Duration Chart (tests más lentos)
+
+#### ⏱️ Timeline
+- Vista cronológica de ejecución
+- Identifica tests en paralelo
+- Detecta cuellos de botella
+
+#### 🗂️ Categories
+- Clasificación automática de errores:
+  - Product Defects (errores del producto)
+  - Test Defects (errores de automatización)
+  - Timeout Issues
+  - Browser Issues
+  - Environment Issues
+
+### Características Avanzadas
+
+#### Screenshots Automáticos 📸
+**Ya está configurado** - Cuando un test falla:
+1. Se captura screenshot automáticamente
+2. Se adjunta al reporte de Allure
+3. Aparece en la sección "Attachments" del test fallido
+
+#### Filtros y Búsqueda 🔍
+En el reporte puedes:
+- Buscar por nombre de test
+- Filtrar por status (Passed/Failed/Broken/Skipped)
+- Filtrar por suite o feature
+- Filtrar por categoría de error
+- Ordenar por duración
+
+### Documentación Completa
+
+Para instrucciones detalladas, troubleshooting y ejemplos avanzados, consulta:
+
+📖 **[ALLURE_GUIDE.md](./ALLURE_GUIDE.md)** - Guía completa de Allure Report
 
 ### Ubicación de reportes
-- **Allure**: `build/allure-results/`
-- **Test Results**: `build/test-results/`
-- **Reports HTML**: `build/reports/tests/test/`
+- **Resultados Allure**: `build/allure-results/`
+- **Reporte HTML Allure**: `build/reports/allure-report/`
+- **Test Results TestNG**: `build/test-results/`
+- **Cucumber Reports**: `target/cucumber-reports.html`
 
 ## 📝 Escribir Nuevas Pruebas
 
