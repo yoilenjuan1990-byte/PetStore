@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Product Defects",
+    "description": "Errores relacionados con el producto/aplicación bajo prueba",
+    "messageRegex": ".*AssertionError.*",
+    "traceRegex": ".*"
+  },
+  {
+    "name": "Test Defects",
+    "description": "Errores en el código de automatización o configuración",
+    "messageRegex": ".*NullPointerException.*|.*NoSuchElementException.*",
+    "traceRegex": ".*"
+  },
+  {
+    "name": "Timeout Issues",
+    "description": "Problemas de timeout o elementos no encontrados a tiempo",
+    "messageRegex": ".*TimeoutException.*|.*timeout.*",
+    "traceRegex": ".*"
+  },
+  {
+    "name": "Browser Issues",
+    "description": "Problemas relacionados con el navegador o WebDriver",
+    "messageRegex": ".*WebDriverException.*|.*SessionNotCreatedException.*",
+    "traceRegex": ".*"
+  },
+  {
+    "name": "Environment Issues",
+    "description": "Problemas de red, conexión o ambiente",
+    "messageRegex": ".*ConnectionException.*|.*UnknownHostException.*",
+    "traceRegex": ".*"
+  }
+]

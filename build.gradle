@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group = 'org.example'
@@ -94,7 +95,56 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
+// Configuración de Allure
+allure {
+    version = '2.29.0'
+    adapter {
+        frameworks {
+            cucumber {
+                enabled = true
+            }
+        }
+    }
+    report {
+        version = '2.29.0'
+    }
+}
+
 test {
-    useJUnitPlatform()
+    useTestNG() {
+        suites 'src/test/resources/testng.xml'
+    }
     systemProperty 'file.encoding', 'UTF-8'
+    
+    // Configuración para Allure
+    systemProperty 'allure.results.directory', 'build/allure-results'
+    
+    // Ignora fallos para generar reporte completo
+    ignoreFailures = false
+    
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+    }
+}
+
+// Tarea para limpiar resultados anteriores de Allure
+task cleanAllureResults(type: Delete) {
+    delete 'build/allure-results'
+    delete 'allure-results'
+}
+
+// Ejecutar tests y generar reporte de Allure
+task testWithAllure(type: Test) {
+    dependsOn cleanAllureResults
+    useTestNG() {
+        suites 'src/test/resources/testng.xml'
+    }
+    systemProperty 'allure.results.directory', 'build/allure-results'
+    systemProperty 'file.encoding', 'UTF-8'
+    
+    doLast {
+        println "\n✅ Tests ejecutados. Resultados guardados en: build/allure-results"
+        println "📊 Para ver el reporte ejecuta: gradle allureServe"
+    }
 }
